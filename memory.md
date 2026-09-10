@@ -26,6 +26,8 @@ This document records what is finished, what is currently in progress, key archi
 - [x] Installed all dependencies cleanly via `npm install`.
 - [x] Executed production build (`npx vite build`) with zero errors.
 - [x] Connected Git remote to `https://github.com/biswaprakashmohanty324-blip/portfolio-.git`.
+- [x] Pushed all code and assets to GitHub `main` branch.
+- [x] Added and pushed `vercel.json` configured for Vite SPA routing and build output.
 
 ---
 
