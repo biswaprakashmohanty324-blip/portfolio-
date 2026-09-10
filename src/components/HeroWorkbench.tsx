@@ -1,265 +1,188 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, useWindowDimensions, Linking, Image } from 'react-native';
-import { theme } from '../theme/tokens';
 import { profileData } from '../data/portfolioData';
 import { SpecSheet } from './SpecSheet';
+import profileImg from '../../assets/profile.jpg';
 
 interface HeroWorkbenchProps {
-  onNavigate: (section: string) => void;
+  onNavigate: (sectionId: string) => void;
 }
 
-export const HeroWorkbench: React.FC<HeroWorkbenchProps> = ({ onNavigate }: HeroWorkbenchProps) => {
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= 900;
-
-  const handleOpenGitHub = () => {
-    Linking.openURL(profileData.github).catch(() => {});
-  };
-
+export const HeroWorkbench: React.FC<HeroWorkbenchProps> = ({ onNavigate }) => {
   return (
-    <View style={styles.container}>
-      <View style={[styles.layout, isDesktop ? styles.rowLayout : styles.columnLayout]}>
-        {/* Left / Top Narrative & Actions */}
-        <View style={[styles.narrativeCol, isDesktop && styles.narrativeColDesktop]}>
-          
+    <section id="hero" className="hero-section section-divider">
+      <div className="container hero-layout">
+        {/* Left / Main Column */}
+        <div className="hero-main-col">
           {/* Top Profile Photo Frame */}
-          <View style={styles.photoContainer}>
-            <View style={styles.photoFrame}>
-              <Image
-                source={require('../../assets/profile.jpg')}
-                style={styles.profilePhoto}
-                resizeMode="cover"
+          <div className="hero-photo-container">
+            <div className="hero-photo-frame">
+              <img
+                src={profileImg}
+                alt="Biswa Prakash Mohanty"
+                className="hero-profile-img"
               />
-              <View style={styles.photoStatusTag}>
-                <View style={styles.statusDot} />
-                <Text style={styles.photoStatusText}>SYS_ID: VERIFIED // SDE</Text>
-              </View>
-            </View>
-          </View>
+              <div className="hero-photo-status-tag">
+                <span className="hero-status-dot" />
+                <span className="hero-photo-status-text">SYS_ID: VERIFIED // SDE</span>
+              </div>
+            </div>
+          </div>
 
-          <View style={styles.breadcrumbTag}>
-            <Text style={styles.breadcrumbText}>SYS_INIT // DEVELOPER_WORKBENCH</Text>
-          </View>
+          <div className="hero-breadcrumb-tag">
+            <span>SYS_INIT // DEVELOPER_WORKBENCH</span>
+          </div>
 
           {/* Bold Name Headline */}
-          <Text style={styles.headline}>{profileData.headline}</Text>
-          <Text style={styles.roleBadge}>SOFTWARE ENGINEER // FULL-STACK & SYSTEMS</Text>
+          <h1 className="hero-headline">{profileData.headline}</h1>
+          <div className="hero-role-badge">SOFTWARE ENGINEER // FULL-STACK & SYSTEMS</div>
 
-          <Text style={styles.subheadline}>{profileData.subheadline}</Text>
+          <p className="hero-subheadline">{profileData.subheadline}</p>
 
           {/* Action Button Row */}
-          <View style={styles.actionRow}>
-            <Pressable
-              onPress={() => onNavigate('projects')}
-              style={({ pressed }: { pressed: boolean }) => [
-                styles.primaryBtn,
-                pressed && styles.primaryBtnPressed,
-              ]}
+          <div className="hero-action-row">
+            <button
+              onClick={() => onNavigate('projects')}
+              className="btn btn-primary"
             >
-              <Text style={styles.primaryBtnText}>INSPECT PROJECTS ↓</Text>
-            </Pressable>
+              INSPECT PROJECTS ↓
+            </button>
 
-            <Pressable
-              onPress={() => onNavigate('terminal')}
-              style={({ pressed }: { pressed: boolean }) => [
-                styles.secondaryBtn,
-                pressed && styles.secondaryBtnPressed,
-              ]}
+            <button
+              onClick={() => onNavigate('terminal')}
+              className="btn btn-secondary"
             >
-              <Text style={styles.secondaryBtnText}>LAUNCH TERMINAL &gt;</Text>
-            </Pressable>
+              LAUNCH TERMINAL &gt;
+            </button>
 
-            <Pressable
-              onPress={handleOpenGitHub}
-              style={({ pressed }: { pressed: boolean }) => [
-                styles.ghostBtn,
-                pressed && styles.ghostBtnPressed,
-              ]}
+            <a
+              href={profileData.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-ghost"
             >
-              <Text style={styles.ghostBtnText}>GITHUB ↗</Text>
-            </Pressable>
-          </View>
-        </View>
+              GITHUB ↗
+            </a>
+          </div>
+        </div>
 
-        {/* Right / Bottom Spec Sheet */}
-        <View style={[styles.specCol, isDesktop && styles.specColDesktop]}>
+        {/* Right Column: Spec Sheet */}
+        <div className="hero-spec-col">
           <SpecSheet />
-        </View>
-      </View>
-    </View>
+        </div>
+      </div>
+
+      <style>{`
+        .hero-layout {
+          display: grid;
+          grid-template-columns: 1.2fr 0.8fr;
+          gap: var(--space-xl);
+          align-items: flex-start;
+        }
+
+        @media (max-width: 900px) {
+          .hero-layout {
+            grid-template-columns: 1fr;
+          }
+        }
+
+        .hero-photo-container {
+          margin-bottom: var(--space-lg);
+        }
+
+        .hero-photo-frame {
+          width: 140px;
+          height: 180px;
+          background-color: var(--surface-subtle);
+          border: 1px solid var(--color-primary);
+          border-radius: var(--radius-md);
+          overflow: hidden;
+          box-shadow: var(--shadow-hard);
+        }
+
+        .hero-profile-img {
+          width: 100%;
+          height: 152px;
+          object-fit: cover;
+          display: block;
+        }
+
+        .hero-photo-status-tag {
+          height: 28px;
+          background-color: var(--color-secondary);
+          border-top: 1px solid var(--border-structural);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 6px;
+          padding-left: 6px;
+          padding-right: 6px;
+        }
+
+        .hero-status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: var(--status-success);
+        }
+
+        .hero-photo-status-text {
+          font-family: var(--font-mono);
+          color: var(--color-neutral);
+          font-size: 9px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+
+        .hero-breadcrumb-tag {
+          display: inline-block;
+          background-color: var(--surface-subtle);
+          border: 1px solid var(--border-structural);
+          border-radius: var(--radius-sm);
+          padding: 4px 8px;
+          margin-bottom: var(--space-sm);
+          font-family: var(--font-mono);
+          color: var(--color-primary);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+
+        .hero-headline {
+          font-size: 36px;
+          font-weight: 800;
+          letter-spacing: -0.5px;
+          margin-bottom: 4px;
+          text-transform: uppercase;
+          color: var(--color-neutral);
+        }
+
+        .hero-role-badge {
+          font-family: var(--font-mono);
+          color: var(--color-primary-light);
+          font-size: 12px;
+          font-weight: 700;
+          letter-spacing: 1px;
+          margin-bottom: var(--space-md);
+        }
+
+        .hero-subheadline {
+          font-size: 16px;
+          line-height: 1.6;
+          margin-bottom: var(--space-xl);
+          max-width: 640px;
+        }
+
+        .hero-action-row {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: var(--space-sm);
+        }
+
+        .hero-spec-col {
+          width: 100%;
+        }
+      `}</style>
+    </section>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    paddingVertical: theme.spacing['2xl'],
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderStructural,
-  },
-  layout: {
-    width: '100%',
-    gap: theme.spacing.xl,
-  },
-  rowLayout: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-  },
-  columnLayout: {
-    flexDirection: 'column',
-  },
-  narrativeCol: {
-    width: '100%',
-  },
-  narrativeColDesktop: {
-    flex: 1.2,
-  },
-  photoContainer: {
-    marginBottom: theme.spacing.lg,
-    alignSelf: 'flex-start',
-  },
-  photoFrame: {
-    width: 140,
-    height: 180,
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.primary,
-    borderRadius: theme.radii.md,
-    overflow: 'hidden',
-  },
-  profilePhoto: {
-    width: '100%',
-    height: 152,
-  },
-  photoStatusTag: {
-    height: 26,
-    backgroundColor: theme.colors.secondary,
-    borderTopWidth: 1,
-    borderTopColor: theme.colors.borderStructural,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    gap: 6,
-    paddingHorizontal: 6,
-  },
-  statusDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: theme.colors.statusSuccess,
-  },
-  photoStatusText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutral,
-    fontSize: 9,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  breadcrumbTag: {
-    alignSelf: 'flex-start',
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    borderRadius: theme.radii.sm,
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    marginBottom: theme.spacing.sm,
-  },
-  breadcrumbText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  headline: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutral,
-    fontSize: 34,
-    fontWeight: '800',
-    letterSpacing: -0.5,
-    marginBottom: 4,
-    textTransform: 'uppercase',
-  },
-  roleBadge: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primaryLight,
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 1,
-    marginBottom: theme.spacing.md,
-  },
-  subheadline: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutralMuted,
-    ...theme.typography.bodyLg,
-    lineHeight: 26,
-    marginBottom: theme.spacing.xl,
-    maxWidth: 640,
-  },
-  actionRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-  },
-  primaryBtn: {
-    backgroundColor: theme.colors.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: theme.radii.md,
-  },
-  primaryBtnPressed: {
-    backgroundColor: theme.colors.primaryHover,
-  },
-  primaryBtnText: {
-    fontFamily: theme.fonts.mono,
-    color: '#000000',
-    fontSize: 12,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  secondaryBtn: {
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: theme.radii.md,
-  },
-  secondaryBtnPressed: {
-    backgroundColor: theme.colors.primaryMuted,
-  },
-  secondaryBtnText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primaryLight,
-    fontSize: 12,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-  },
-  ghostBtn: {
-    backgroundColor: 'transparent',
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    borderRadius: theme.radii.md,
-  },
-  ghostBtnPressed: {
-    borderColor: theme.colors.borderProminent,
-    backgroundColor: theme.colors.surfaceSubtle,
-  },
-  ghostBtnText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralMuted,
-    fontSize: 12,
-    fontWeight: '500',
-    letterSpacing: 0.5,
-  },
-  specCol: {
-    width: '100%',
-  },
-  specColDesktop: {
-    flex: 0.8,
-  },
-});

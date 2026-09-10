@@ -1,6 +1,6 @@
-# Implementation Phases & Project Roadmap — React Native
+# Implementation Phases & Project Roadmap — React (Vite)
 
-This roadmap details the sequential phases for building, refining, and testing the **React Native** Technical Blueprint portfolio.
+This roadmap details the sequential phases for building, refining, and testing the **React 18 + Vite** Technical Blueprint portfolio.
 
 ---
 
@@ -8,11 +8,11 @@ This roadmap details the sequential phases for building, refining, and testing t
 
 ```mermaid
 graph LR
-    P1["Phase 1<br/>Context & Plan"] --> P2["Phase 2<br/>Expo & Scaffolding"]
-    P2 --> P3["Phase 3<br/>Theme & Data"]
-    P3 --> P4["Phase 4<br/>Components"]
-    P4 --> P5["Phase 5<br/>Terminal Widget"]
-    P5 --> P6["Phase 6<br/>Verification & Web"]
+    P1["Phase 1<br/>Context & Plan"] --> P2["Phase 2<br/>React + Vite Scaffold"]
+    P2 --> P3["Phase 3<br/>CSS Tokens & Data"]
+    P3 --> P4["Phase 4<br/>Interactive Components"]
+    P4 --> P5["Phase 5<br/>Profile & Headline"]
+    P5 --> P6["Phase 6<br/>Verification & Git Push"]
 ```
 
 ---
@@ -21,50 +21,45 @@ graph LR
 
 ### Phase 1: Context Engineering & Alignment (Status: Completed)
 - [x] Initialized all 6 context files based on course standard.
-- [x] Approved implementation plan for React Native migration.
-- [x] Updated `PRD.md`, `Architecture.md`, `rules.md`, `phases.md`, `design.md`, and `memory.md` for React Native.
+- [x] Approved implementation plan for React (Vite) transition.
+- [x] Synchronized `PRD.md`, `Architecture.md`, `rules.md`, `phases.md`, `design.md`, and `memory.md`.
 
 ---
 
-### Phase 2: React Native (Expo) Project Scaffolding (Status: In Progress)
-- [ ] Initialize Expo package configuration (`package.json`, `app.json`, `tsconfig.json`).
-- [ ] Install React Native, Expo, and React Native Web dependencies.
-- [ ] Establish root `App.tsx` and directory structure (`src/components/`, `src/theme/`, `src/data/`, `src/utils/`).
-- **Verification Gate**: TypeScript compiles cleanly; development server launches without errors.
+### Phase 2: React 18 + Vite Scaffolding (Status: Completed)
+- [x] Configured `package.json` with React 18, React-DOM, and Vite 6.
+- [x] Configured `vite.config.ts` and `tsconfig.json` for React JSX and asset imports.
+- [x] Configured `index.html` with Google Fonts (`Geist`, `JetBrains Mono`) and `#root` container.
+- [x] Installed dependencies cleanly (`npm install`).
 
 ---
 
-### Phase 3: Theme Tokens & Data Layer (Status: Pending)
-- [ ] Implement `src/theme/tokens.ts` mapping all colors, spacing, and typography from `Dark.md`.
-- [ ] Implement `src/theme/types.ts` for type-safe theme consumption.
-- [ ] Implement `src/data/portfolioData.ts` with developer profile, featured projects, benchmarks, experience timeline, and skills.
-- **Verification Gate**: Design tokens strictly match `Dark.md` hex codes and values.
+### Phase 3: CSS Tokens & Data Layer (Status: Completed)
+- [x] Implemented `src/styles/tokens.css` mapping all colors, spacing, and typography from `Dark.md`.
+- [x] Implemented `src/styles/index.css` with reset, layout grid, buttons, badges, and terminal styles.
+- [x] Preserved and verified `src/data/portfolioData.ts` with developer profile, featured projects, benchmarks, experience timeline, and skills.
 
 ---
 
-### Phase 4: Core Presentation Components (Status: Pending)
-- [ ] Implement `SystemBar.tsx`: Identity banner, live status beacon, resume link.
-- [ ] Implement `HeroWorkbench.tsx`: Technical positioning headline and action row.
-- [ ] Implement `SpecSheet.tsx`: Monospace quick-spec card.
-- [ ] Implement `ProjectCard.tsx`: Asymmetric layout with metadata strip, architecture notes, benchmarks, and stack tags.
-- [ ] Implement `ExperienceTimeline.tsx`: Vertical guideline with square node markers and monospace timestamps.
-- [ ] Implement `SkillsMatrix.tsx`: Categorized skill chips with subtle borders.
-- [ ] Implement `ContactSection.tsx`: Direct contact actions with clipboard copy alerts.
-- **Verification Gate**: Components render with high visual density and 7:1 text contrast.
+### Phase 4: Interactive React Component Library (Status: Completed)
+- [x] `SystemBar.tsx`: Identity banner, live system beacon, GitHub & LinkedIn links.
+- [x] `SpecSheet.tsx`: Monospace quick-spec card with core competencies and metrics.
+- [x] `ProjectCard.tsx`: Asymmetric layout with metadata strip, architecture notes, benchmarks, and stack tags.
+- [x] `TerminalWidget.tsx`: Interactive command console with autocomplete suggestion chips.
+- [x] `ExperienceTimeline.tsx`: Vertical guideline with square node markers and monospace timestamps.
+- [x] `SkillsMatrix.tsx`: Categorized skill chips with subtle borders.
+- [x] `ContactSection.tsx`: Direct contact actions with one-click clipboard copy.
 
 ---
 
-### Phase 5: Interactive Terminal Console Widget (Status: Pending)
-- [ ] Implement `TerminalWidget.tsx`:
-  - Command input parsing (`help`, `about`, `projects`, `skills`, `contact`, `clear`).
-  - Scrollable terminal output buffer.
-  - Suggestion chips for quick touch/tap command execution.
-- **Verification Gate**: All commands execute properly and produce formatted output.
+### Phase 5: Profile Photo & Developer Branding (Status: Completed)
+- [x] Installed `assets/profile.jpg` in high-contrast frame with verified telemetry indicator.
+- [x] Implemented bold uppercase headline **BISWA PRAKASH MOHANTY** in `HeroWorkbench.tsx`.
 
 ---
 
-### Phase 6: Responsive Layout, Testing & Optimization (Status: Pending)
-- [ ] Verify fluid responsiveness across Desktop (>=1024px) 12-column layout, Tablet (768px-1023px), and Mobile (<768px) views.
-- [ ] Audit keyboard accessibility and touch targets (minimum 44x44px for primary interactions).
-- [ ] Verify Web preview via `react-native-web`.
-- **Verification Gate**: Type check passes (`tsc --noEmit`), app builds cleanly, and UI passes visual verification.
+### Phase 6: Build Verification & Git Repository Synchronization (Status: In Progress)
+- [x] Verified production build (`npx vite build` executed with 0 errors).
+- [ ] Stage all modified and untracked files in Git.
+- [ ] Create Git commit with descriptive message.
+- [ ] Push all commits to GitHub repository: `https://github.com/biswaprakashmohanty324-blip/portfolio-.git`.

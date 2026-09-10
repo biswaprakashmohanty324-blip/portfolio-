@@ -1,10 +1,10 @@
-# Architecture & Technical Organization — React Native
+# Architecture & Technical Organization — React (Vite)
 
 ## 1. Architectural Philosophy
-The portfolio is architected as a cross-platform application using **React Native**, powered by the **Expo** ecosystem and **React Native Web**.
-- **Unified Cross-Platform Core**: One cohesive TypeScript codebase targeting Web browsers, Android, and iOS without maintaining separate web and native codebases.
-- **Component-Driven Primitives**: Built strictly with React Native primitives (`View`, `Text`, `Pressable`, `ScrollView`, `TextInput`, `SafeAreaView`) styled via typed `StyleSheet` modules.
-- **Decoupled Data Architecture**: All portfolio records (projects, experience, skills, specs) are housed in pure data modules (`src/data/`), enabling clean separation of data and rendering logic.
+The portfolio is architected as a high-performance single-page web application using **React 18**, **Vite**, and **TypeScript**.
+- **Modern Standards Core**: Native HTML5 semantic tags (`<header>`, `<nav>`, `<main>`, `<section>`, `<article>`, `<aside>`, `<footer>`), styled via native Vanilla CSS custom properties (`tokens.css`).
+- **Lightning-Fast Toolchain**: Powered by Vite and ES modules for instant hot module replacement (HMR) and optimized static production builds.
+- **Decoupled Data Architecture**: All portfolio records (projects, experience, skills, specs) reside in `src/data/portfolioData.ts`, cleanly separating content data from presentation components.
 
 ---
 
@@ -12,29 +12,31 @@ The portfolio is architected as a cross-platform application using **React Nativ
 
 ```
 portfolio/
-├── App.tsx                     # Application root, font provider, theme container
-├── app.json                    # Expo project configuration
+├── index.html                  # Core single-page HTML5 entrypoint
+├── vite.config.ts              # Vite bundler configuration
 ├── package.json                # Project dependencies & scripts
 ├── tsconfig.json               # TypeScript compiler options
 ├── src/
-│   ├── theme/
-│   │   ├── tokens.ts           # Design tokens (Colors, Typography, Spacing, Borders)
-│   │   └── types.ts            # Type definitions for design system
+│   ├── main.tsx                # React 18 createRoot entrypoint
+│   ├── App.tsx                 # Main application layout & filter coordinator
+│   ├── styles/
+│   │   ├── tokens.css          # CSS Custom Properties (Colors, Typography, Spacing)
+│   │   └── index.css           # Global resets, base typography, and utilities
 │   ├── data/
 │   │   └── portfolioData.ts    # Single source of truth for projects, skills, timeline
 │   ├── components/
 │   │   ├── SystemBar.tsx       # Top identity & live status banner
-│   │   ├── HeroWorkbench.tsx   # Headline & technical positioning
-│   │   ├── SpecSheet.tsx       # Quick technical specifications card
-│   │   ├── ProjectCard.tsx     # Asymmetric project card with architecture & metrics
+│   │   ├── HeroWorkbench.tsx   # Photo frame, bold headline, and CTAs
+│   │   ├── SpecSheet.tsx       # Technical telemetry register card
+│   │   ├── ProjectCard.tsx     # Asymmetric card with architecture & metrics
 │   │   ├── TerminalWidget.tsx  # Interactive command console emulator
 │   │   ├── ExperienceTimeline.tsx # Vertical milestone guideline
 │   │   ├── SkillsMatrix.tsx    # Categorized skill chips
 │   │   └── ContactSection.tsx  # Utilitarian contact register
-│   └── utils/
-│       └── responsive.ts       # Viewport breakpoint hooks & responsive helpers
+│   └── types/
+│       └── declarations.d.ts   # Static asset module declarations (*.jpg, *.png)
 ├── assets/
-│   ├── icons/                  # SVG icons and asset images
+│   ├── profile.jpg             # User profile picture
 │   └── docs/                   # Candidate resume
 ├── Dark.md                     # Dark-mode design system reference
 ├── Light.md                    # Light-mode design system reference
@@ -52,12 +54,12 @@ portfolio/
 
 ```mermaid
 graph TD
-    App["App.tsx<br/>(Font Loader & ScrollView)"]
-    App --> SystemBar["SystemBar.tsx<br/>(Status Beacon & Nav Actions)"]
-    App --> Hero["HeroWorkbench.tsx<br/>(Positioning & CTAs)"]
+    Main["src/main.tsx<br/>(React 18 Root)"] --> App["src/App.tsx<br/>(Layout & State)"]
+    App --> SystemBar["SystemBar.tsx<br/>(Brand & Nav Actions)"]
+    App --> Hero["HeroWorkbench.tsx<br/>(Photo, Bold Headline & CTAs)"]
     Hero --> SpecSheet["SpecSheet.tsx<br/>(Quick Spec Card)"]
     App --> Projects["Projects Section<br/>(Filter Bar & ProjectCard.tsx)"]
-    App --> Terminal["TerminalWidget.tsx<br/>(Command Interpreter)"]
+    App --> Terminal["TerminalWidget.tsx<br/>(Interactive Console)"]
     App --> Timeline["ExperienceTimeline.tsx<br/>(Milestone Stream)"]
     App --> Skills["SkillsMatrix.tsx<br/>(Domain Chips)"]
     App --> Contact["ContactSection.tsx<br/>(Direct Actions)"]
@@ -73,63 +75,8 @@ graph TD
 
 ---
 
-## 4. Styling & Design Token Pipeline
-Instead of CSS stylesheets, styling is managed through a typed `tokens.ts` module consumed by React Native's `StyleSheet.create()`:
-
-```typescript
-// src/theme/tokens.ts
-export const theme = {
-  colors: {
-    primary: '#D97706',          // Electric industrial amber
-    secondary: '#0F172A',        // Deep obsidian slate
-    tertiary: '#475569',         // Cool slate
-    neutral: '#FAFAF9',          // Technical off-white
-    surfaceCanvas: '#0F172A',    // Background canvas
-    surfaceSubtle: '#1E293B',    // Card module backgrounds
-    surfaceElevated: '#334155',  // Sidebar panels, elevated cards
-    surfaceDeep: '#0C0F0E',      // Terminal background well
-    borderStructural: '#334155', // Standard 1px divider
-    borderProminent: '#64748B',  // Container frame
-    statusSuccess: '#059669',    // Live/online indicator
-    statusWarning: '#D97706',    // WIP/Beta indicator
-    statusError: '#DC2626'       // Error indicator
-  },
-  spacing: {
-    xs: 8,
-    sm: 12,
-    md: 16,
-    lg: 24,
-    xl: 32,
-    '2xl': 48
-  },
-  radii: {
-    sm: 4,
-    md: 8,
-    lg: 12
-  }
-};
-```
-
----
-
-## 5. Responsive Layout Architecture
-To ensure the 12-column asymmetric layout renders properly on desktop web while stacking smoothly on mobile:
-- **`useWindowDimensions()`**: Dynamic hook tracking screen width.
-- **Breakpoints**:
-  - Desktop (`width >= 1024`): Two-column asymmetric layouts (Hero + SpecSheet, Project Grid, Terminal Side-by-Side).
-  - Tablet (`768 <= width < 1024`): Condensed 2-column or stacked layout.
-  - Mobile (`width < 768`): Single column stacked layout with 100% width cards.
-- **Max Container Constraint**: Content constrained to `maxWidth: 1152` (72rem) and centered with `alignSelf: 'center'`.
-
----
-
-## 6. Terminal Engine State Machine
-The embedded terminal emulator operates as a self-contained React Native state machine:
-```typescript
-interface CommandEntry {
-  command: string;
-  output: string | string[];
-  timestamp: string;
-}
-```
-State holds an array of `CommandEntry` items rendered inside an auto-scrolling `ScrollView`. Commands dispatch through a pure mapping object, returning pre-compiled text outputs or triggering actions (e.g. copying email or scrolling to sections).
+## 4. Styling Architecture & Design Token Pipeline
+Styling is maintained via CSS custom properties defined in `src/styles/tokens.css`:
+- **Colors**: `--color-primary: #D97706;`, `--surface-canvas: #0F172A;`, `--surface-subtle: #1E293B;`, `--surface-elevated: #334155;`
+- **Typography**: `Geist` (Sans) for headlines and prose, `JetBrains Mono` for metadata, tags, and terminal.
+- **Elevation**: Flat 1px structural borders paired with hard 2px non-diffuse offset shadows (`box-shadow: 2px 2px 0px 0px #000000`).

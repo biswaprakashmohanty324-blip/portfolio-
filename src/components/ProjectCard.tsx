@@ -1,225 +1,239 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, Linking } from 'react-native';
-import { theme } from '../theme/tokens';
 import { Project } from '../data/portfolioData';
 
 interface ProjectCardProps {
   project: Project;
 }
 
-export const ProjectCard: React.FC<ProjectCardProps> = ({ project }: ProjectCardProps) => {
-  const handleOpenRepo = () => {
-    Linking.openURL(project.repoUrl).catch(() => {});
-  };
-
-  const handleOpenLive = () => {
-    if (project.liveUrl) {
-      Linking.openURL(project.liveUrl).catch(() => {});
-    }
-  };
-
+export const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => {
   const isProduction = project.status === 'PRODUCTION';
 
   return (
-    <View style={styles.card}>
+    <article className="project-card">
       {/* Top Metadata Strip */}
-      <View style={styles.metadataStrip}>
-        <View style={styles.statusGroup}>
-          <View
-            style={[
-              styles.statusDot,
-              { backgroundColor: isProduction ? theme.colors.statusSuccess : theme.colors.statusWarning },
-            ]}
+      <div className="project-meta-strip">
+        <div className="project-status-group">
+          <span
+            className="project-status-dot"
+            style={{
+              backgroundColor: isProduction
+                ? 'var(--status-success)'
+                : 'var(--status-warning)',
+            }}
           />
-          <Text style={styles.statusText}>{project.status}</Text>
-          <Text style={styles.categoryText}>// {project.category.toUpperCase()}</Text>
-        </View>
+          <span className="project-status-text">{project.status}</span>
+          <span className="project-category-text">
+            // {project.category.toUpperCase()}
+          </span>
+        </div>
 
-        <View style={styles.linksGroup}>
-          <Pressable onPress={handleOpenRepo} style={styles.iconLink}>
-            <Text style={styles.linkText}>REPO ↗</Text>
-          </Pressable>
+        <div className="project-links-group">
+          <a
+            href={project.repoUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="project-link"
+          >
+            REPO ↗
+          </a>
           {project.liveUrl && (
-            <Pressable onPress={handleOpenLive} style={styles.iconLink}>
-              <Text style={[styles.linkText, styles.liveText]}>LIVE DEMO ↗</Text>
-            </Pressable>
+            <a
+              href={project.liveUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="project-link project-live-link"
+            >
+              LIVE DEMO ↗
+            </a>
           )}
-        </View>
-      </View>
+        </div>
+      </div>
 
       {/* Main Content Body */}
-      <View style={styles.body}>
-        <Text style={styles.title}>{project.title}</Text>
-        <Text style={styles.tagline}>{project.tagline}</Text>
+      <div className="project-body">
+        <h3 className="project-title">{project.title}</h3>
+        <p className="project-tagline">{project.tagline}</p>
 
-        <View style={styles.divider} />
+        <div className="project-divider" />
 
         {/* Architecture Section */}
-        <View style={styles.sectionBlock}>
-          <Text style={styles.sectionLabel}>// SYSTEM_ARCHITECTURE</Text>
-          <Text style={styles.architectureText}>{project.architecture}</Text>
-        </View>
+        <div className="project-section-block">
+          <div className="project-section-label">// SYSTEM_ARCHITECTURE</div>
+          <p className="project-architecture-text">{project.architecture}</p>
+        </div>
 
         {/* Benchmarks Section */}
-        <View style={styles.sectionBlock}>
-          <Text style={styles.sectionLabel}>// MEASURABLE_METRICS</Text>
-          {project.benchmarks.map((benchmark: string, idx: number) => (
-            <View key={idx} style={styles.benchmarkRow}>
-              <Text style={styles.benchmarkBullet}>■</Text>
-              <Text style={styles.benchmarkText}>{benchmark}</Text>
-            </View>
-          ))}
-        </View>
+        <div className="project-section-block">
+          <div className="project-section-label">// MEASURABLE_METRICS</div>
+          <div className="project-benchmarks-list">
+            {project.benchmarks.map((benchmark: string, idx: number) => (
+              <div key={idx} className="project-benchmark-row">
+                <span className="project-benchmark-bullet">■</span>
+                <span className="project-benchmark-text">{benchmark}</span>
+              </div>
+            ))}
+          </div>
+        </div>
 
-        <View style={styles.divider} />
+        <div className="project-divider" />
 
         {/* Tech Stack Badges */}
-        <View style={styles.stackRow}>
+        <div className="project-stack-row">
           {project.stack.map((tech: string, idx: number) => (
-            <View key={idx} style={styles.techChip}>
-              <Text style={styles.techText}>{tech}</Text>
-            </View>
+            <span key={idx} className="tag-chip">
+              {tech}
+            </span>
           ))}
-        </View>
-      </View>
-    </View>
+        </div>
+      </div>
+
+      <style>{`
+        .project-card {
+          background-color: var(--surface-subtle);
+          border: 1px solid var(--border-structural);
+          border-radius: var(--radius-md);
+          overflow: hidden;
+          margin-bottom: var(--space-lg);
+          transition: border-color 0.2s ease;
+        }
+
+        .project-card:hover {
+          border-color: var(--border-prominent);
+        }
+
+        .project-meta-strip {
+          background-color: var(--color-secondary);
+          border-bottom: 1px solid var(--border-structural);
+          padding: var(--space-xs) var(--space-md);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 8px;
+        }
+
+        .project-status-group {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .project-status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+        }
+
+        .project-status-text {
+          font-family: var(--font-mono);
+          color: var(--color-neutral);
+          font-size: 11px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+
+        .project-category-text {
+          font-family: var(--font-mono);
+          color: var(--color-neutral-subtle);
+          font-size: 11px;
+        }
+
+        .project-links-group {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+        }
+
+        .project-link {
+          font-family: var(--font-mono);
+          color: var(--color-neutral-muted);
+          font-size: 11px;
+          font-weight: 600;
+          transition: color 0.15s ease;
+        }
+
+        .project-link:hover {
+          color: var(--color-primary-light);
+        }
+
+        .project-live-link {
+          color: var(--color-primary-light);
+        }
+
+        .project-body {
+          padding: var(--space-md);
+        }
+
+        .project-title {
+          font-size: 20px;
+          font-weight: 700;
+          margin-bottom: 4px;
+        }
+
+        .project-tagline {
+          font-size: 14px;
+          line-height: 1.4;
+          margin-bottom: var(--space-sm);
+        }
+
+        .project-divider {
+          height: 1px;
+          background-color: rgba(51, 65, 85, 0.4);
+          margin-top: var(--space-sm);
+          margin-bottom: var(--space-sm);
+        }
+
+        .project-section-block {
+          margin-top: 6px;
+          margin-bottom: 6px;
+        }
+
+        .project-section-label {
+          font-family: var(--font-mono);
+          color: var(--color-primary);
+          font-size: 10px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+          margin-bottom: 4px;
+        }
+
+        .project-architecture-text {
+          font-size: 13px;
+          line-height: 1.5;
+          color: var(--color-neutral);
+        }
+
+        .project-benchmarks-list {
+          display: flex;
+          flex-direction: column;
+          gap: 4px;
+        }
+
+        .project-benchmark-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+
+        .project-benchmark-bullet {
+          font-family: var(--font-mono);
+          color: var(--color-primary);
+          font-size: 8px;
+        }
+
+        .project-benchmark-text {
+          font-family: var(--font-mono);
+          color: var(--color-neutral-muted);
+          font-size: 12px;
+        }
+
+        .project-stack-row {
+          display: flex;
+          flex-wrap: wrap;
+          gap: 6px;
+          margin-top: 4px;
+        }
+      `}</style>
+    </article>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    borderRadius: theme.radii.md,
-    overflow: 'hidden',
-    marginBottom: theme.spacing.lg,
-  },
-  metadataStrip: {
-    backgroundColor: theme.colors.secondary,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderStructural,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.xs,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 8,
-  },
-  statusGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  statusDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-  },
-  statusText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutral,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  categoryText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralSubtle,
-    fontSize: 11,
-  },
-  linksGroup: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  iconLink: {
-    paddingVertical: 2,
-    paddingHorizontal: 4,
-  },
-  linkText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralMuted,
-    fontSize: 11,
-    fontWeight: '600',
-  },
-  liveText: {
-    color: theme.colors.primaryLight,
-  },
-  body: {
-    padding: theme.spacing.md,
-  },
-  title: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutral,
-    fontSize: 20,
-    fontWeight: '700',
-    marginBottom: 4,
-  },
-  tagline: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutralMuted,
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: theme.spacing.sm,
-  },
-  divider: {
-    height: 1,
-    backgroundColor: 'rgba(51, 65, 85, 0.4)',
-    marginVertical: theme.spacing.sm,
-  },
-  sectionBlock: {
-    marginVertical: 4,
-  },
-  sectionLabel: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 10,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    marginBottom: 4,
-  },
-  architectureText: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutral,
-    fontSize: 13,
-    lineHeight: 19,
-  },
-  benchmarkRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 3,
-  },
-  benchmarkBullet: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 8,
-  },
-  benchmarkText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralMuted,
-    fontSize: 12,
-  },
-  stackRow: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 6,
-    marginTop: 4,
-  },
-  techChip: {
-    backgroundColor: theme.colors.surfaceElevated,
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    borderRadius: theme.radii.sm,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-  },
-  techText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutral,
-    fontSize: 11,
-    fontWeight: '500',
-  },
-});

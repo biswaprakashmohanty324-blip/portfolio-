@@ -1,10 +1,10 @@
-# Product Requirements Document (PRD) — React Native Edition
+# Product Requirements Document (PRD) — React (Vite) Edition
 
 ## 1. Overview & Objective
-- **Product Name**: Technical Blueprint — React Native Engineering Portfolio & Workbench
-- **Target Owner**: Biswa Prakash (Software Engineer)
-- **Primary Goal**: Deliver a high-density, engineering-first portfolio application built with **React Native (Expo + React Native Web)**. It serves as both an instantly accessible web portfolio for technical recruiters and an installable cross-platform mobile application (iOS & Android).
-- **Core Problem Solved**: Eliminates the disconnect between mobile-first engineering portfolios and recruiter access. Most portfolios are either rigid desktop web pages or locked-down mobile apps. By using React Native with web support, the portfolio provides universal scannability across desktop screens, tablets, and phones with a unified, high-performance codebase.
+- **Product Name**: Technical Blueprint — React Developer Portfolio & Workbench
+- **Target Owner**: Biswa Prakash Mohanty (Software Engineer)
+- **Primary Goal**: Deliver a high-density, engineering-first personal portfolio web application built with **React 18**, **Vite**, and **TypeScript**. Tailored for engineering managers and technical recruiters, it showcases technical competence, operational rigor, and system design skills.
+- **Core Problem Solved**: Typical software engineer portfolios rely on superficial aesthetic trends (whimsical floating animations, generic card carousels, lack of architecture details, slow load times). Engineering managers and recruiters review portfolios in under 30 seconds and need immediate access to technical depth, production metrics, architecture decisions, and code quality.
 
 ---
 
@@ -14,62 +14,59 @@
    - *Behavior*: Scans project architectures, metric benchmarks, and technical trade-offs in under 30 seconds.
 2. **Technical Recruiters & Talent Partners**
    - *Goal*: Quickly assess core skills, years of experience, primary stacks, and download candidate resume.
-   - *Behavior*: Accesses via mobile phone or desktop web browser; requires immediate visibility of resume, contact options, and role fit.
-3. **Senior Engineers & Mobile Specialists**
-   - *Goal*: Review React Native component architecture, TypeScript types, state management, and interactive terminal functionality.
-   - *Behavior*: Interacts with the embedded terminal widget, tests responsive touch targets, and inspects clean component composition.
+   - *Behavior*: Needs immediate access to resume download, key skills chips, contact info, and role fit.
+3. **Senior Engineers & Peer Reviewers**
+   - *Goal*: Review code craftsmanship, TypeScript type definitions, state management, and interactive terminal functionality.
+   - *Behavior*: Interacts with the embedded terminal widget, tests responsive layouts, and inspects clean semantic markup.
 
 ---
 
 ## 3. Key Product Pillars
-- **Universal Cross-Platform Delivery**: Runs natively on Web (via `react-native-web`), iOS, and Android using a single Expo codebase.
 - **Analytical Sobriety**: High-density engineering workbench aesthetic adhering strictly to the **Technical Blueprint** design system (`#D97706` amber accents, `#0F172A` obsidian canvas, `#1E293B` elevated cards).
-- **30-Second Scannability**: 12-column asymmetric layout on desktop browser viewports, reflowing into stacked modular cards on mobile viewports.
-- **Interactive Terminal Workbench**: An interactive command-line emulator built with React Native primitives (`TextInput`, `ScrollView`, command parsing engine).
+- **Fast Performance & Instant Paint**: Powered by Vite with sub-second FCP and minimal runtime overhead.
+- **30-Second Scannability**: 12-column asymmetric layout with metadata registers that surface key credentials, project stats, and links instantly.
+- **Interactive Terminal Workbench**: An interactive command-line emulator built with React state and keyboard event listeners.
 
 ---
 
 ## 4. Functional Specifications & Component Hierarchy
 
 ### 4.1 System Header & Status Bar (`SystemBar.tsx`)
-- Persistent/sticky top header with safe-area insets.
-- Displays candidate name (`Biswa Prakash`), role (`Software Engineer`), and live pulse indicator (`[ONLINE] Open to Opportunities`).
-- Action triggers: "Resume [PDF]" link and section navigation anchors.
+- Persistent/sticky top header with brand lockup (`[BP] BISWA PRAKASH MOHANTY // SOFTWARE ENGINEER`) and live pulse indicator (`SYS: ACTIVE // READY`).
+- Direct action triggers: "RESUME.PDF ↗" and in-page navigation anchors.
 
 ### 4.2 Hero & Technical Workbench (`HeroWorkbench.tsx`)
-- Positioning headline emphasizing systems engineering, software craft, and performance.
-- Action button row (`Inspect Projects`, `Download Resume`, `Open Terminal`).
-- Integrated **Technical Spec Sheet** (`SpecSheet.tsx`): quick data register showing primary languages, frameworks, cloud tooling, and current focus.
+- Verified profile photo frame with user picture (`assets/profile.jpg`) and status tag `SYS_ID: VERIFIED // SDE`.
+- Bold name headline `<h1>BISWA PRAKASH MOHANTY</h1>` and role badge `SOFTWARE ENGINEER // FULL-STACK & SYSTEMS`.
+- Primary action buttons: `INSPECT PROJECTS ↓`, `LAUNCH TERMINAL >`, `GITHUB ↗`.
+- Integrated **Technical Spec Sheet** (`SpecSheet.tsx`) showing primary stack, cloud infra, and current focus.
 
 ### 4.3 Featured Projects Registry (`ProjectCard.tsx`)
 - Asymmetric project documentation cards:
-  - **Metadata Strip**: Status badge (`Production`, `Active Beta`), repository URL, live demo link.
+  - **Metadata Strip**: Status badge (`PRODUCTION`, `ACTIVE BETA`), category, repository link, live demo link.
   - **Architecture Summary**: Concrete problem statement, system architecture design, and technical stack chips.
-  - **Measurable Benchmarks**: Real performance indicators (e.g. latency, throughput, reliability).
-  - **Tag Filter**: Category filter chips (All, Distributed Systems, Frontend/Mobile, Cloud/DevOps).
+  - **Measurable Benchmarks**: Real performance indicators (e.g. latency, throughput, scale).
+  - **Category Filter Bar**: Filter chips for all domains.
 
 ### 4.4 Interactive Terminal Console (`TerminalWidget.tsx`)
-- Utilitarian terminal emulator powered by React Native state:
-  - Supported commands: `help`, `about`, `skills`, `projects`, `contact`, `clear`.
-  - Command input prompt with autocompletion/suggestion chips for quick touch access.
-  - Scrollable output buffer with syntax-highlighted monospace text.
+- Utilitarian terminal emulator powered by React state:
+  - Commands: `help`, `about`, `projects`, `skills`, `contact`, `specs`, `clear`.
+  - Command input prompt with suggestion chips for quick touch/click execution.
+  - Auto-scrolling output buffer.
 
 ### 4.5 Engineering Experience Timeline (`ExperienceTimeline.tsx`)
-- Vertical structural line with square node markers (`6px × 6px`).
-- Monospace timestamps aligned in a dedicated column separating dates from role descriptions.
-- Measurable business and technical outcomes.
+- Vertical structural guideline with square node markers (`8px × 8px`) and monospace timestamps.
+- Role, organization, technical scope, and quantifiable engineering deliverables.
 
 ### 4.6 Technical Skills Matrix (`SkillsMatrix.tsx`)
 - Categorized skill domains: Languages, Mobile & Frontend, Backend & Systems, Cloud & Infra, Databases.
-- Monospace chips with subtle 1px borders and high-contrast text.
 
 ### 4.7 Contact & Communication Register (`ContactSection.tsx`)
-- Direct contact links (Email, GitHub, LinkedIn) with copy-to-clipboard feedback alerts.
+- Direct contact links (Email, GitHub, LinkedIn) with copy-to-clipboard action and feedback alert.
 
 ---
 
 ## 5. Non-Functional Requirements
-- **TypeScript**: Strict type definitions for theme tokens, project records, and component props.
-- **Performance**: 60fps animations/scrolling; zero jank; sub-second initial load on web.
-- **Accessibility**: Standard React Native accessibility properties (`accessible`, `accessibilityRole`, `accessibilityLabel`, `accessibilityHint`).
-- **Responsive Layout**: Fluid breakpoints handling desktop screens (>=1024px), tablets (768px-1023px), and mobile phones (<768px).
+- **Performance**: Instant load via Vite; zero layout shift.
+- **Accessibility**: Semantic HTML5 elements (`<header>`, `<nav>`, `<main>`, `<article>`, `<aside>`, `<footer>`) with visible focus states.
+- **Responsiveness**: Fluid 12-column grid reflowing gracefully from mobile viewports (<768px) to desktop viewports (>=1024px).

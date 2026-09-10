@@ -1,153 +1,151 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
-import { theme } from '../theme/tokens';
 import { experienceData, ExperienceItem } from '../data/portfolioData';
 
 export const ExperienceTimeline: React.FC = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.sectionHeader}>
-        <Text style={styles.sectionCode}>// SECTION_03</Text>
-        <Text style={styles.sectionTitle}>ENGINEERING EXPERIENCE & MILESTONES</Text>
-      </View>
+    <section id="experience" className="section-divider">
+      <div className="container">
+        <div className="section-header">
+          <div className="section-code">// SECTION_03</div>
+          <h2 className="section-title">ENGINEERING EXPERIENCE & MILESTONES</h2>
+        </div>
 
-      <View style={styles.timelineList}>
-        {experienceData.map((item: ExperienceItem, index: number) => (
-          <View key={item.id} style={styles.timelineItem}>
-            {/* Left guideline & node */}
-            <View style={styles.lineCol}>
-              <View style={styles.nodeMarker} />
-              {index !== experienceData.length - 1 && <View style={styles.verticalLine} />}
-            </View>
+        <div className="timeline-list">
+          {experienceData.map((item: ExperienceItem, index: number) => (
+            <div key={item.id} className="timeline-item">
+              {/* Left guideline & node */}
+              <div className="timeline-line-col">
+                <div className="timeline-node-marker" />
+                {index !== experienceData.length - 1 && (
+                  <div className="timeline-vertical-line" />
+                )}
+              </div>
 
-            {/* Content block */}
-            <View style={styles.contentCol}>
-              <View style={styles.itemHeader}>
-                <Text style={styles.periodText}>{item.period}</Text>
-                <Text style={styles.roleText}>{item.role}</Text>
-                <Text style={styles.companyText}>@ {item.company}</Text>
-              </View>
+              {/* Content block */}
+              <div className="timeline-content-col">
+                <div className="timeline-item-header">
+                  <div className="timeline-period">{item.period}</div>
+                  <h3 className="timeline-role">{item.role}</h3>
+                  <span className="timeline-company">@ {item.company}</span>
+                </div>
 
-              <Text style={styles.scopeText}>{item.scope}</Text>
+                <p className="timeline-scope">{item.scope}</p>
 
-              <View style={styles.metricsContainer}>
-                {item.metrics.map((metric: string, idx: number) => (
-                  <View key={idx} style={styles.metricRow}>
-                    <Text style={styles.metricBullet}>▸</Text>
-                    <Text style={styles.metricText}>{metric}</Text>
-                  </View>
-                ))}
-              </View>
-            </View>
-          </View>
-        ))}
-      </View>
-    </View>
+                <div className="timeline-metrics-box">
+                  {item.metrics.map((metric: string, idx: number) => (
+                    <div key={idx} className="timeline-metric-row">
+                      <span className="timeline-metric-bullet">▸</span>
+                      <span className="timeline-metric-text">{metric}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      <style>{`
+        .timeline-list {
+          padding-left: 4px;
+        }
+
+        .timeline-item {
+          display: flex;
+          margin-bottom: var(--space-xl);
+        }
+
+        .timeline-line-col {
+          width: 24px;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          flex-shrink: 0;
+        }
+
+        .timeline-node-marker {
+          width: 8px;
+          height: 8px;
+          background-color: var(--color-primary);
+          margin-top: 6px;
+          flex-shrink: 0;
+        }
+
+        .timeline-vertical-line {
+          width: 1px;
+          flex: 1;
+          background-color: var(--border-structural);
+          margin-top: 4px;
+        }
+
+        .timeline-content-col {
+          flex: 1;
+          padding-left: var(--space-sm);
+        }
+
+        .timeline-item-header {
+          margin-bottom: 6px;
+        }
+
+        .timeline-period {
+          font-family: var(--font-mono);
+          color: var(--color-primary);
+          font-size: 11px;
+          font-weight: 600;
+          letter-spacing: 0.5px;
+          margin-bottom: 2px;
+        }
+
+        .timeline-role {
+          font-size: 18px;
+          font-weight: 700;
+          color: var(--color-neutral);
+          display: inline-block;
+          margin-right: 6px;
+        }
+
+        .timeline-company {
+          font-family: var(--font-mono);
+          color: var(--color-neutral-subtle);
+          font-size: 13px;
+        }
+
+        .timeline-scope {
+          font-size: 14px;
+          line-height: 1.5;
+          color: var(--color-neutral-muted);
+          margin-bottom: 8px;
+        }
+
+        .timeline-metrics-box {
+          background-color: var(--surface-subtle);
+          border: 1px solid var(--border-structural);
+          border-radius: var(--radius-sm);
+          padding: var(--space-sm);
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .timeline-metric-row {
+          display: flex;
+          align-items: flex-start;
+          gap: 8px;
+        }
+
+        .timeline-metric-bullet {
+          font-family: var(--font-mono);
+          color: var(--color-primary);
+          font-size: 12px;
+          line-height: 18px;
+        }
+
+        .timeline-metric-text {
+          font-size: 13px;
+          line-height: 1.5;
+          color: var(--color-neutral);
+        }
+      `}</style>
+    </section>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    paddingVertical: theme.spacing.xl,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderStructural,
-  },
-  sectionHeader: {
-    marginBottom: theme.spacing.lg,
-  },
-  sectionCode: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-    marginBottom: 4,
-  },
-  sectionTitle: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutral,
-    ...theme.typography.headlineLg,
-  },
-  timelineList: {
-    paddingLeft: 4,
-  },
-  timelineItem: {
-    flexDirection: 'row',
-    marginBottom: theme.spacing.xl,
-  },
-  lineCol: {
-    width: 24,
-    alignItems: 'center',
-  },
-  nodeMarker: {
-    width: 8,
-    height: 8,
-    backgroundColor: theme.colors.primary,
-    marginTop: 6,
-  },
-  verticalLine: {
-    width: 1,
-    flex: 1,
-    backgroundColor: theme.colors.borderStructural,
-    marginTop: 4,
-  },
-  contentCol: {
-    flex: 1,
-    paddingLeft: theme.spacing.sm,
-  },
-  itemHeader: {
-    marginBottom: 6,
-  },
-  periodText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 11,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-    marginBottom: 2,
-  },
-  roleText: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutral,
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  companyText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralSubtle,
-    fontSize: 13,
-  },
-  scopeText: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutralMuted,
-    fontSize: 14,
-    lineHeight: 20,
-    marginBottom: 8,
-  },
-  metricsContainer: {
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    borderRadius: theme.radii.sm,
-    padding: theme.spacing.sm,
-    gap: 6,
-  },
-  metricRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 6,
-  },
-  metricBullet: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 12,
-    lineHeight: 18,
-  },
-  metricText: {
-    flex: 1,
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutral,
-    fontSize: 13,
-    lineHeight: 18,
-  },
-});

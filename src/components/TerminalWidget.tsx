@@ -1,14 +1,4 @@
-import React, { useState, useRef } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  StyleSheet,
-  Pressable,
-  ScrollView,
-  Platform,
-} from 'react-native';
-import { theme } from '../theme/tokens';
+import React, { useState, useRef, useEffect } from 'react';
 import { profileData, projectsData, skillsData } from '../data/portfolioData';
 
 interface HistoryItem {
@@ -24,13 +14,21 @@ export const TerminalWidget: React.FC = () => {
       id: 'init-1',
       command: 'sys.status',
       output: [
-        'Biswa Prakash Workbench v2.4.0 [x86_64-apple-darwin / linux-amd64]',
+        'Biswa Prakash Mohanty Workbench v3.0.0 [React 18 + Vite / Linux-x86_64]',
         'Type "help" to view available terminal routines.',
       ],
     },
   ]);
 
-  const scrollViewRef = useRef<ScrollView>(null);
+  const outputEndRef = useRef<HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    outputEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [history]);
 
   const executeCommand = (rawCmd: string) => {
     const cmd = rawCmd.trim().toLowerCase();
@@ -68,7 +66,7 @@ export const TerminalWidget: React.FC = () => {
           ...projectsData.map(
             (p) => `  [${p.status}] ${p.title} (${p.category}) -> ${p.benchmarks[0]}`
           ),
-          'Use project cards above to inspect architecture diagrams and live demos.',
+          'Explore project cards on the page for detailed architecture breakdowns.',
         ];
         break;
 
@@ -115,220 +113,226 @@ export const TerminalWidget: React.FC = () => {
       { id: String(Date.now()), command: rawCmd, output },
     ]);
     setInputVal('');
-
-    setTimeout(() => {
-      scrollViewRef.current?.scrollToEnd({ animated: true });
-    }, 50);
   };
 
-  const handleQuickCommand = (cmd: string) => {
-    executeCommand(cmd);
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      executeCommand(inputVal);
+    }
   };
 
   return (
-    <View style={styles.card}>
+    <div className="terminal-card">
       {/* Terminal Title Bar */}
-      <View style={styles.titleBar}>
-        <View style={styles.windowControls}>
-          <View style={[styles.dot, styles.dotClose]} />
-          <View style={[styles.dot, styles.dotMin]} />
-          <View style={[styles.dot, styles.dotMax]} />
-        </View>
-        <Text style={styles.titleText}>session@biswa-workbench:~ (bash)</Text>
-        <Text style={styles.statusIndicator}>● TTY1</Text>
-      </View>
+      <div className="terminal-title-bar">
+        <div className="terminal-controls">
+          <span className="terminal-dot dot-red" />
+          <span className="terminal-dot dot-yellow" />
+          <span className="terminal-dot dot-green" />
+        </div>
+        <span className="terminal-title-text">session@biswa-workbench:~ (bash)</span>
+        <span className="terminal-status-tag">● TTY1</span>
+      </div>
 
-      {/* Quick Suggestion Chips for touch / quick interaction */}
-      <View style={styles.chipRow}>
-        <Text style={styles.chipLabel}>ROUTINES:</Text>
-        {['help', 'about', 'projects', 'skills', 'contact', 'clear'].map(
-          (cmd: string) => (
-            <Pressable
-              key={cmd}
-              onPress={() => handleQuickCommand(cmd)}
-              style={({ pressed }: { pressed: boolean }) => [
-                styles.cmdChip,
-                pressed && styles.cmdChipPressed,
-              ]}
-            >
-              <Text style={styles.cmdChipText}>${cmd}</Text>
-            </Pressable>
-          )
-        )}
-      </View>
+      {/* Quick Suggestion Chips */}
+      <div className="terminal-chips-bar">
+        <span className="terminal-chip-label">ROUTINES:</span>
+        {['help', 'about', 'projects', 'skills', 'contact', 'clear'].map((cmd: string) => (
+          <button
+            key={cmd}
+            onClick={() => executeCommand(cmd)}
+            className="terminal-cmd-chip"
+          >
+            ${cmd}
+          </button>
+        ))}
+      </div>
 
-      {/* Terminal Output Well */}
-      <ScrollView
-        ref={scrollViewRef}
-        style={styles.terminalBody}
-        contentContainerStyle={styles.terminalContent}
-        nestedScrollEnabled
-      >
+      {/* Terminal Body */}
+      <div className="terminal-body">
         {history.map((item: HistoryItem) => (
-          <View key={item.id} style={styles.historyBlock}>
-            <View style={styles.promptLine}>
-              <Text style={styles.promptArrow}>&gt;</Text>
-              <Text style={styles.promptCommand}>{item.command}</Text>
-            </View>
-            {item.output.map((line: string, i: number) => (
-              <Text key={i} style={styles.outputLine}>
-                {line}
-              </Text>
-            ))}
-          </View>
+          <div key={item.id} className="terminal-history-item">
+            <div className="terminal-prompt-row">
+              <span className="terminal-arrow">&gt;</span>
+              <span className="terminal-cmd-text">{item.command}</span>
+            </div>
+            <div className="terminal-output-lines">
+              {item.output.map((line: string, idx: number) => (
+                <div key={idx} className="terminal-output-line">
+                  {line}
+                </div>
+              ))}
+            </div>
+          </div>
         ))}
 
-        {/* Active Input Line */}
-        <View style={styles.inputLine}>
-          <Text style={styles.promptArrow}>&gt;</Text>
-          <TextInput
-            style={styles.textInput}
+        {/* Input Line */}
+        <div className="terminal-input-row">
+          <span className="terminal-arrow">&gt;</span>
+          <input
+            type="text"
             value={inputVal}
-            onChangeText={setInputVal}
-            onSubmitEditing={() => executeCommand(inputVal)}
+            onChange={(e) => setInputVal(e.target.value)}
+            onKeyDown={handleKeyDown}
             placeholder="Type routine (e.g. help, projects, skills)..."
-            placeholderTextColor={theme.colors.tertiary}
+            className="terminal-input"
             autoCapitalize="none"
-            autoCorrect={false}
-            returnKeyType="go"
+            autoComplete="off"
+            spellCheck="false"
           />
-        </View>
-      </ScrollView>
-    </View>
+        </div>
+
+        <div ref={outputEndRef} />
+      </div>
+
+      <style>{`
+        .terminal-card {
+          background-color: var(--surface-deep);
+          border: 1px solid var(--border-structural);
+          border-radius: var(--radius-lg);
+          overflow: hidden;
+          margin-top: var(--space-lg);
+          margin-bottom: var(--space-lg);
+          box-shadow: var(--shadow-hard-lg);
+        }
+
+        .terminal-title-bar {
+          background-color: var(--color-secondary);
+          border-bottom: 1px solid var(--border-structural);
+          padding: var(--space-xs) var(--space-md);
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+        }
+
+        .terminal-controls {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+
+        .terminal-dot {
+          width: 10px;
+          height: 10px;
+          border-radius: 50%;
+          display: inline-block;
+        }
+
+        .dot-red { background-color: var(--status-error); }
+        .dot-yellow { background-color: var(--status-warning); }
+        .dot-green { background-color: var(--status-success); }
+
+        .terminal-title-text {
+          font-family: var(--font-mono);
+          color: var(--color-neutral-muted);
+          font-size: 11px;
+          font-weight: 500;
+        }
+
+        .terminal-status-tag {
+          font-family: var(--font-mono);
+          color: var(--status-success);
+          font-size: 10px;
+          font-weight: 700;
+        }
+
+        .terminal-chips-bar {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          gap: 6px;
+          padding: 8px var(--space-md);
+          background-color: rgba(15, 23, 42, 0.6);
+          border-bottom: 1px solid var(--border-structural);
+        }
+
+        .terminal-chip-label {
+          font-family: var(--font-mono);
+          color: var(--color-primary);
+          font-size: 10px;
+          font-weight: 700;
+          margin-right: 4px;
+        }
+
+        .terminal-cmd-chip {
+          background-color: var(--surface-subtle);
+          border: 1px solid var(--border-structural);
+          border-radius: var(--radius-sm);
+          padding: 2px 8px;
+          font-family: var(--font-mono);
+          font-size: 11px;
+          color: var(--color-neutral);
+          transition: background-color 0.15s ease, border-color 0.15s ease;
+        }
+
+        .terminal-cmd-chip:hover {
+          background-color: var(--color-primary-muted);
+          border-color: var(--color-primary);
+          color: var(--color-primary-light);
+        }
+
+        .terminal-body {
+          height: 260px;
+          overflow-y: auto;
+          padding: var(--space-md);
+          font-family: var(--font-mono);
+        }
+
+        .terminal-history-item {
+          margin-bottom: var(--space-sm);
+        }
+
+        .terminal-prompt-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 4px;
+        }
+
+        .terminal-arrow {
+          color: var(--color-primary);
+          font-weight: 700;
+          font-size: 13px;
+        }
+
+        .terminal-cmd-text {
+          color: var(--color-neutral);
+          font-size: 13px;
+          font-weight: 600;
+        }
+
+        .terminal-output-lines {
+          padding-left: 16px;
+        }
+
+        .terminal-output-line {
+          color: var(--color-neutral-muted);
+          font-size: 12px;
+          line-height: 1.5;
+        }
+
+        .terminal-input-row {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-top: 4px;
+        }
+
+        .terminal-input {
+          flex: 1;
+          background: transparent;
+          border: none;
+          outline: none;
+          color: var(--color-neutral);
+          font-family: var(--font-mono);
+          font-size: 13px;
+          padding: 0;
+        }
+
+        .terminal-input::placeholder {
+          color: var(--color-tertiary);
+        }
+      `}</style>
+    </div>
   );
 };
-
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: theme.colors.surfaceDeep,
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    borderRadius: theme.radii.lg,
-    overflow: 'hidden',
-    marginVertical: theme.spacing.lg,
-  },
-  titleBar: {
-    backgroundColor: theme.colors.secondary,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderStructural,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: theme.spacing.xs,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  windowControls: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  dot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-  },
-  dotClose: { backgroundColor: '#DC2626' },
-  dotMin: { backgroundColor: '#D97706' },
-  dotMax: { backgroundColor: '#059669' },
-  titleText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralMuted,
-    fontSize: 11,
-    fontWeight: '500',
-  },
-  statusIndicator: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.statusSuccess,
-    fontSize: 10,
-    fontWeight: '700',
-  },
-  chipRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: 6,
-    paddingHorizontal: theme.spacing.md,
-    paddingVertical: 8,
-    backgroundColor: 'rgba(15, 23, 42, 0.6)',
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderStructural,
-  },
-  chipLabel: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 10,
-    fontWeight: '700',
-    marginRight: 4,
-  },
-  cmdChip: {
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    borderRadius: theme.radii.sm,
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-  },
-  cmdChipPressed: {
-    backgroundColor: theme.colors.primaryMuted,
-    borderColor: theme.colors.primary,
-  },
-  cmdChipText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutral,
-    fontSize: 11,
-    fontWeight: '500',
-  },
-  terminalBody: {
-    height: 240,
-    padding: theme.spacing.md,
-  },
-  terminalContent: {
-    paddingBottom: theme.spacing.md,
-  },
-  historyBlock: {
-    marginBottom: theme.spacing.sm,
-  },
-  promptLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginBottom: 4,
-  },
-  promptArrow: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  promptCommand: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutral,
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  outputLine: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralMuted,
-    fontSize: 12,
-    lineHeight: 18,
-    paddingLeft: 16,
-  },
-  inputLine: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-    marginTop: 4,
-  },
-  textInput: {
-    flex: 1,
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutral,
-    fontSize: 13,
-    padding: 0,
-    ...Platform.select({
-      web: {
-        outlineStyle: 'none' as any,
-      },
-    }),
-  },
-});

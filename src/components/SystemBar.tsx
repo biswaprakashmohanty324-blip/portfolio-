@@ -1,174 +1,170 @@
 import React from 'react';
-import { View, Text, StyleSheet, Pressable, Linking } from 'react-native';
-import { theme } from '../theme/tokens';
 import { profileData } from '../data/portfolioData';
 
 interface SystemBarProps {
-  onNavigate: (section: string) => void;
+  onNavigate: (sectionId: string) => void;
 }
 
-export const SystemBar: React.FC<SystemBarProps> = ({ onNavigate }: SystemBarProps) => {
-  const handleOpenResume = () => {
-    Linking.openURL('https://example.com/resume.pdf').catch(() => {});
-  };
-
+export const SystemBar: React.FC<SystemBarProps> = ({ onNavigate }) => {
   return (
-    <View style={styles.container}>
-      <View style={styles.inner}>
+    <header className="sys-bar-wrapper">
+      <div className="container sys-bar-inner">
         {/* Identity & Status Beacon */}
-        <View style={styles.identityContainer}>
-          <Pressable onPress={() => onNavigate('hero')} style={styles.brandRow}>
-            <Text style={styles.brandCode}>[BP]</Text>
-            <Text style={styles.brandName}>{profileData.name.toUpperCase()}</Text>
-            <Text style={styles.brandRole}>// {profileData.title.toUpperCase()}</Text>
-          </Pressable>
+        <div className="sys-identity-group">
+          <button onClick={() => onNavigate('hero')} className="sys-brand-link">
+            <span className="sys-brand-code">[BP]</span>
+            <span className="sys-brand-name">{profileData.name.toUpperCase()}</span>
+            <span className="sys-brand-role">// {profileData.title.toUpperCase()}</span>
+          </button>
 
-          <View style={styles.statusChip}>
-            <View style={styles.statusDot} />
-            <Text style={styles.statusText}>SYS: ACTIVE // READY</Text>
-          </View>
-        </View>
+          <div className="sys-status-chip">
+            <span className="sys-status-dot" />
+            <span className="sys-status-text">SYS: ACTIVE // READY</span>
+          </div>
+        </div>
 
         {/* Navigation Action Links */}
-        <View style={styles.navRow}>
-          <Pressable onPress={() => onNavigate('projects')} style={styles.navLink}>
-            <Text style={styles.navText}>PROJECTS</Text>
-          </Pressable>
-          <Pressable onPress={() => onNavigate('terminal')} style={styles.navLink}>
-            <Text style={styles.navText}>TERMINAL</Text>
-          </Pressable>
-          <Pressable onPress={() => onNavigate('experience')} style={styles.navLink}>
-            <Text style={styles.navText}>EXPERIENCE</Text>
-          </Pressable>
-          <Pressable onPress={() => onNavigate('skills')} style={styles.navLink}>
-            <Text style={styles.navText}>SKILLS</Text>
-          </Pressable>
-          <Pressable onPress={() => onNavigate('contact')} style={styles.navLink}>
-            <Text style={styles.navText}>CONTACT</Text>
-          </Pressable>
+        <nav className="sys-nav-group" aria-label="Main Navigation">
+          <button onClick={() => onNavigate('projects')} className="sys-nav-link">
+            PROJECTS
+          </button>
+          <button onClick={() => onNavigate('terminal')} className="sys-nav-link">
+            TERMINAL
+          </button>
+          <button onClick={() => onNavigate('experience')} className="sys-nav-link">
+            EXPERIENCE
+          </button>
+          <button onClick={() => onNavigate('skills')} className="sys-nav-link">
+            SKILLS
+          </button>
+          <button onClick={() => onNavigate('contact')} className="sys-nav-link">
+            CONTACT
+          </button>
 
-          {/* Resume CTA */}
-          <Pressable
-            onPress={handleOpenResume}
-            style={({ pressed }: { pressed: boolean }) => [
-              styles.resumeButton,
-              pressed && styles.resumeButtonPressed,
-            ]}
+          <a
+            href="https://example.com/resume.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="btn btn-secondary sys-resume-btn"
           >
-            <Text style={styles.resumeButtonText}>RESUME.PDF ↗</Text>
-          </Pressable>
-        </View>
-      </View>
-    </View>
+            RESUME.PDF ↗
+          </a>
+        </nav>
+      </div>
+
+      <style>{`
+        .sys-bar-wrapper {
+          width: 100%;
+          background-color: var(--surface-canvas);
+          border-bottom: 1px solid var(--border-structural);
+          position: sticky;
+          top: 0;
+          z-index: 1000;
+        }
+
+        .sys-bar-inner {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          padding-top: var(--space-sm);
+          padding-bottom: var(--space-sm);
+          flex-wrap: wrap;
+          gap: var(--space-sm);
+        }
+
+        .sys-identity-group {
+          display: flex;
+          align-items: center;
+          gap: var(--space-md);
+          flex-wrap: wrap;
+        }
+
+        .sys-brand-link {
+          display: flex;
+          align-items: center;
+          gap: 6px;
+          text-align: left;
+        }
+
+        .sys-brand-code {
+          font-family: var(--font-mono);
+          color: var(--color-primary);
+          font-size: 13px;
+          font-weight: 700;
+        }
+
+        .sys-brand-name {
+          font-family: var(--font-sans);
+          color: var(--color-neutral);
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: 0.5px;
+        }
+
+        .sys-brand-role {
+          font-family: var(--font-mono);
+          color: var(--color-tertiary);
+          font-size: 12px;
+          font-weight: 500;
+        }
+
+        .sys-status-chip {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          padding: 3px 8px;
+          background-color: var(--surface-subtle);
+          border: 1px solid var(--border-structural);
+          border-radius: var(--radius-sm);
+        }
+
+        .sys-status-dot {
+          width: 6px;
+          height: 6px;
+          border-radius: 50%;
+          background-color: var(--status-success);
+          animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+          0% { opacity: 1; }
+          50% { opacity: 0.4; }
+          100% { opacity: 1; }
+        }
+
+        .sys-status-text {
+          font-family: var(--font-mono);
+          color: var(--color-neutral-muted);
+          font-size: 11px;
+          font-weight: 500;
+        }
+
+        .sys-nav-group {
+          display: flex;
+          align-items: center;
+          gap: var(--space-md);
+          flex-wrap: wrap;
+        }
+
+        .sys-nav-link {
+          font-family: var(--font-mono);
+          color: var(--color-neutral-muted);
+          font-size: 12px;
+          font-weight: 500;
+          letter-spacing: 0.5px;
+          padding: 4px 6px;
+          transition: color 0.15s ease;
+        }
+
+        .sys-nav-link:hover {
+          color: var(--color-primary-light);
+        }
+
+        .sys-resume-btn {
+          font-size: 11px;
+          padding: 6px 10px;
+        }
+      `}</style>
+    </header>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    width: '100%',
-    backgroundColor: theme.colors.surfaceCanvas,
-    borderBottomWidth: 1,
-    borderBottomColor: theme.colors.borderStructural,
-    zIndex: 100,
-  },
-  inner: {
-    maxWidth: 1152,
-    width: '100%',
-    alignSelf: 'center',
-    paddingHorizontal: theme.spacing.lg,
-    paddingVertical: theme.spacing.sm,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexWrap: 'wrap',
-    gap: theme.spacing.sm,
-  },
-  identityContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.md,
-    flexWrap: 'wrap',
-  },
-  brandRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.xs,
-  },
-  brandCode: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primary,
-    fontSize: 13,
-    fontWeight: '700',
-  },
-  brandName: {
-    fontFamily: theme.fonts.sans,
-    color: theme.colors.neutral,
-    fontSize: 14,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-  brandRole: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.tertiary,
-    fontSize: 12,
-    fontWeight: '500',
-  },
-  statusChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.borderStructural,
-    borderRadius: theme.radii.sm,
-  },
-  statusDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: theme.colors.statusSuccess,
-  },
-  statusText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralMuted,
-    fontSize: 11,
-    fontWeight: '500',
-  },
-  navRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: theme.spacing.md,
-    flexWrap: 'wrap',
-  },
-  navLink: {
-    paddingVertical: 4,
-    paddingHorizontal: 6,
-  },
-  navText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.neutralMuted,
-    fontSize: 12,
-    fontWeight: '500',
-    letterSpacing: 0.5,
-  },
-  resumeButton: {
-    backgroundColor: theme.colors.surfaceSubtle,
-    borderWidth: 1,
-    borderColor: theme.colors.primary,
-    borderRadius: theme.radii.md,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  resumeButtonPressed: {
-    backgroundColor: theme.colors.primaryMuted,
-  },
-  resumeButtonText: {
-    fontFamily: theme.fonts.mono,
-    color: theme.colors.primaryLight,
-    fontSize: 11,
-    fontWeight: '700',
-    letterSpacing: 0.5,
-  },
-});

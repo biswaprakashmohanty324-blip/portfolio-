@@ -1,4 +1,4 @@
-# Visual Design System: Technical Blueprint — React Native
+# Visual Design System: Technical Blueprint — React (Vite)
 
 ## 1. Design Identity & Emotional Tone
 The **Technical Blueprint** design system projects an engineering-first portfolio tailored for software engineering recruiters, hiring managers, and senior technical interviewers.
@@ -8,67 +8,65 @@ The **Technical Blueprint** design system projects an engineering-first portfoli
 
 ---
 
-## 2. React Native Theme Tokens (`src/theme/tokens.ts`)
+## 2. CSS Design Tokens (`src/styles/tokens.css`)
 
 ### 2.1 Color Palette
-```typescript
-export const colors = {
-  // Brand & Accents
-  primary: '#D97706',          // Electric industrial amber (active states, metrics, focus rings)
-  secondary: '#0F172A',        // Deep obsidian slate (structural ink, button fills)
-  tertiary: '#475569',         // Cool slate (secondary text, timestamps, inactive borders)
-  neutral: '#FAFAF9',          // Technical off-white (high-legibility readable copy)
+```css
+:root {
+  /* Brand & Accents */
+  --color-primary: #D97706;          /* Electric industrial amber */
+  --color-secondary: #0F172A;        /* Deep obsidian slate */
+  --color-tertiary: #475569;         /* Cool slate */
+  --color-neutral: #FAFAF9;          /* Technical off-white */
 
-  // Surface Elevations
-  surfaceCanvas: '#0F172A',    // Main page body canvas
-  surfaceSubtle: '#1E293B',    // Card modules, data tables, inspect wells
-  surfaceElevated: '#334155',  // Sidebar panels, elevated registers
-  surfaceDeep: '#0C0F0E',      // Terminal interior background well
+  /* Surface Elevations */
+  --color-surface-canvas: #0F172A;    /* Main page body canvas */
+  --color-surface-subtle: #1E293B;    /* Card modules, data tables */
+  --color-surface-elevated: #334155;  /* Sidebar panels, elevated registers */
+  --color-surface-deep: #0C0F0E;      /* Terminal interior background well */
 
-  // Structural Borders
-  borderStructural: '#334155', // Standard 1px divider
-  borderProminent: '#64748B',  // Container boundary frame
-  borderActive: '#D97706',     // Focused or active item border
+  /* Structural Borders */
+  --color-border-structural: #334155; /* Standard 1px divider */
+  --color-border-prominent: #64748B;  /* Container boundary frame */
+  --color-border-active: #D97706;     /* Focused or active item border */
 
-  // Operational Status
-  statusSuccess: '#059669',    // Live/online/production
-  statusWarning: '#D97706',    // Beta/WIP
-  statusError: '#DC2626'       // Error/alert
-};
+  /* Operational Status */
+  --color-status-success: #059669;    /* Live/online/production */
+  --color-status-warning: #D97706;    /* Beta/WIP */
+  --color-status-error: #DC2626;      /* Error/alert */
+}
 ```
 
 ---
 
-## 3. Typography Hierarchy in React Native
+## 3. Typography Hierarchy
 
-In React Native, typography is defined with `fontSize`, `fontWeight`, and `lineHeight`:
+Defined in `src/styles/tokens.css` with Google Fonts `Geist` and `JetBrains Mono`:
 
 | Token | Size | Weight | LineHeight | Family / Role |
 |---|---|---|---|---|
-| `headlineXl` | 32 | `'700'` | 40 | Screen & section main titling |
-| `headlineLg` | 24 | `'600'` | 32 | Card headers & module titles |
-| `headlineSm` | 18 | `'600'` | 24 | Sub-section headers |
-| `bodyLg` | 16 | `'400'` | 24 | Primary narrative copy |
-| `bodyMd` | 14 | `'400'` | 20 | Secondary narrative copy |
-| `bodySm` | 13 | `'400'` | 18 | Micro-copy, captions |
-| `labelCode` | 13 | `'500'` | 18 | Monospace buttons & terminal input |
-| `labelTag` | 11 | `'500'` | 14 | Monospace technology badges |
-| `labelMeta` | 12 | `'400'` | 16 | Monospace timestamps & hashes |
+| `--font-size-xl` | 32px | `700` | 1.25 | Screen & section main titling (`<h1>`) |
+| `--font-size-lg` | 24px | `600` | 1.33 | Card headers & module titles (`<h2>`, `<h3>`) |
+| `--font-size-sm` | 18px | `600` | 1.33 | Sub-section headers (`<h4>`) |
+| `--font-size-body` | 15px | `400` | 1.5 | Primary narrative copy (`<p>`) |
+| `--font-size-code` | 13px | `500` | 1.4 | Monospace buttons & terminal input |
+| `--font-size-tag` | 11px | `500` | 1.3 | Monospace technology badges |
+| `--font-size-meta` | 12px | `400` | 1.4 | Monospace timestamps & hashes |
 
 ---
 
 ## 4. Spacing & Grid System (8px Baseline)
 
-```typescript
-export const spacing = {
-  xs: 8,
-  sm: 12,
-  md: 16,
-  lg: 24,
-  xl: 32,
-  '2xl': 48,
-  '3xl': 64
-};
+```css
+:root {
+  --space-xs: 8px;
+  --space-sm: 12px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+}
 ```
 
 - **Max Container Width**: 1152px (`72rem`), centered horizontally on desktop screens.
@@ -77,56 +75,19 @@ export const spacing = {
 
 ---
 
-## 5. Elevation, Depth & Geometry in React Native
+## 5. Elevation, Depth & Geometry
 
 ### 5.1 Depth Construction
-- **Flat 1px Structural Borders**:
-  ```typescript
-  borderWidth: 1,
-  borderColor: colors.borderStructural,
-  ```
-- **Hard Platform Offset Shadows**:
-  ```typescript
-  // Platform-safe hard shadow (Web & Native)
-  ...Platform.select({
-    web: {
-      boxShadow: '2px 2px 0px 0px #000000',
-    },
-    default: {
-      shadowColor: '#000000',
-      shadowOffset: { width: 2, height: 2 },
-      shadowOpacity: 1,
-      shadowRadius: 0,
-      elevation: 2,
-    },
-  })
-  ```
+- **Flat 1px Structural Borders**: `border: 1px solid var(--color-border-structural)`
+- **Hard 2px Offset Shadows**: `box-shadow: 2px 2px 0px 0px #000000`
 - **Prohibited**: Soft blurred glows and diffuse drop shadows are strictly prohibited.
 
 ### 5.2 Corner Radii
-```typescript
-export const radii = {
-  sm: 4,
-  md: 8,   // Standard components (buttons, cards, inputs)
-  lg: 12   // Terminal frames, code containers
-};
+```css
+:root {
+  --radius-sm: 4px;
+  --radius-md: 8px;   /* Standard components (buttons, cards, inputs) */
+  --radius-lg: 12px;  /* Terminal frames, code containers */
+}
 ```
-- Full circular pills (`borderRadius: 9999`) are **banned** to preserve utilitarian precision.
-
----
-
-## 6. React Native Component Specifications
-
-### 6.1 Buttons
-- **Primary**: Background `colors.secondary`, border `1px solid colors.borderStructural`, text `colors.neutral`, radius `8px`. Active focus ring with `borderColor: colors.primary`.
-- **Accent Action**: Solid `colors.primary`, text `#FFFFFF`, radius `8px`. Used for high-priority CTAs.
-
-### 6.2 Badges & Chips
-- Fixed `8px` radius, padding `4px 8px`.
-- Tech Stack badge: Background `colors.surfaceSubtle`, text `colors.neutral`, border `1px solid colors.borderStructural`.
-- Active metric badge: Border `1px solid colors.primary`, text `#FBBF24`, 6px indicator dot.
-
-### 6.3 Project Documentation Cards
-- Background `colors.surfaceSubtle`, border `1px solid colors.borderStructural`, radius `8px`.
-- Metadata strip: Horizontal flex container displaying status, monospace stack tags, and repository link.
-- Sub-elements divided by 1px horizontal lines (`height: 1`, `backgroundColor: colors.borderStructural`).
+- Full circular pills (`border-radius: 9999px`) are banned to preserve utilitarian precision.
