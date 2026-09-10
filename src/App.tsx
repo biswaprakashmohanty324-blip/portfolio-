@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { projectsData, Project } from './data/portfolioData';
 import { SystemBar } from './components/SystemBar';
 import { HeroWorkbench } from './components/HeroWorkbench';

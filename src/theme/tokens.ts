@@ -1,5 +1,3 @@
-import { Platform } from 'react-native';
-
 export const theme = {
   colors: {
     // Brand & Focus Accents
@@ -33,14 +31,8 @@ export const theme = {
   },
 
   fonts: {
-    sans: Platform.select({
-      web: 'Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
-      default: 'System',
-    }),
-    mono: Platform.select({
-      web: 'JetBrains Mono, monospace',
-      default: 'monospace',
-    }),
+    sans: 'Geist, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
+    mono: 'JetBrains Mono, monospace',
   },
 
   typography: {
@@ -114,29 +106,7 @@ export const theme = {
   },
 
   shadows: {
-    hard: Platform.select({
-      web: {
-        boxShadow: '2px 2px 0px 0px #000000',
-      },
-      default: {
-        shadowColor: '#000000',
-        shadowOffset: { width: 2, height: 2 },
-        shadowOpacity: 1,
-        shadowRadius: 0,
-        elevation: 2,
-      },
-    }),
-    hardLg: Platform.select({
-      web: {
-        boxShadow: '4px 4px 0px 0px #000000',
-      },
-      default: {
-        shadowColor: '#000000',
-        shadowOffset: { width: 4, height: 4 },
-        shadowOpacity: 1,
-        shadowRadius: 0,
-        elevation: 4,
-      },
-    }),
+    hard: '2px 2px 0px 0px #000000',
+    hardLg: '4px 4px 0px 0px #000000',
   },
 };
