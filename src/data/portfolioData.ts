@@ -30,7 +30,7 @@ export const profileData = {
   title: 'Software Engineer',
   systemStatus: 'ONLINE: Open to Opportunities',
   location: 'Global / Remote',
-  email: 'biswaprakash.dev@example.com',
+  email: 'biswaprakashmohanty324@gmail.com',
   github: 'https://github.com/biswaprakashmohanty324-blip',
   portfolioRepo: 'https://github.com/biswaprakashmohanty324-blip/portfolio-',
   linkedin: 'https://linkedin.com',
